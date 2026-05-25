@@ -1,0 +1,12 @@
+2026/05/25-14:54:36.100 5194 Reusing MANIFEST V:\Projets\Afrisell\wa-bridge\sessions\session-57e122bb-fc66-4572-9793-8f9f5b299216\Default\IndexedDB\https_web.whatsapp.com_0.indexeddb.leveldb/MANIFEST-000001
+2026/05/25-14:54:36.101 5194 Recovering log #18
+2026/05/25-14:54:36.420 5194 Reusing old log V:\Projets\Afrisell\wa-bridge\sessions\session-57e122bb-fc66-4572-9793-8f9f5b299216\Default\IndexedDB\https_web.whatsapp.com_0.indexeddb.leveldb/000018.log 
+2026/05/25-14:54:36.421 5194 Delete type=2 #17
+2026/05/25-14:54:36.421 5194 Delete type=2 #19
+2026/05/25-14:54:41.585 4990 Level-0 table #23: started
+2026/05/25-14:54:41.842 4990 Level-0 table #23: 1030768 bytes OK
+2026/05/25-14:54:41.897 4990 Delete type=0 #18
+2026/05/25-14:54:42.218 5194 Compacting 1@1 + 1@2 files
+2026/05/25-14:54:42.512 5194 Generated table #24@1: 17355 keys, 859389 bytes
+2026/05/25-14:54:42.513 5194 Compacted 1@1 + 1@2 files => 859389 bytes
+2026/05/25-14:54:42.537 5194 compacted to: files[ 0 0 1 0 0 0 0 ]

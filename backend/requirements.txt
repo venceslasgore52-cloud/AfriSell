@@ -1,0 +1,30 @@
+Django>=4.2,<6.1
+djangorestframework
+python-decouple
+psycopg2-binary
+Pillow
+requests
+channels
+channels-redis
+celery
+redis
+reportlab
+gunicorn
+whitenoise
+dj-database-url
+django-cors-headers
+PyJWT
+cryptography
+stripe
+django-celery-beat
+django-filter
+# SIRA — bot WhatsApp
+twilio
+google-generativeai
+openai
+groq
+# Studio IA
+# rembg[cpu]  # suppression fond locale (optionnel — lourd ~170 MB, nécessite onnxruntime)
+# Stockage cloud médias (production)
+cloudinary
+django-cloudinary-storage

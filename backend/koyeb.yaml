@@ -1,0 +1,29 @@
+services:
+  # ── Serveur web Django ──────────────────────────────────────────────────────
+  - name: afrisell-api
+    type: web
+    github:
+      repository: TON_GITHUB_USERNAME/afrisell
+      branch: main
+      build_command: >
+        pip install -r requirements.txt &&
+        python manage.py collectstatic --noinput &&
+        python manage.py migrate
+      run_command: gunicorn AfriSell.wsgi:application --bind 0.0.0.0:$PORT --workers 2 --timeout 120
+    ports:
+      - port: 8000
+        protocol: http
+    env:
+      - key: DEBUG
+        value: "False"
+      - key: ALLOWED_HOSTS
+        value: "*.koyeb.app,api.afrisell.com"
+
+  # ── Celery worker ───────────────────────────────────────────────────────────
+  - name: afrisell-worker
+    type: worker
+    github:
+      repository: TON_GITHUB_USERNAME/afrisell
+      branch: main
+      build_command: pip install -r requirements.txt
+      run_command: celery -A AfriSell worker --loglevel=info --concurrency=1
