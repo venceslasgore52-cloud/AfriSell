@@ -53,3 +53,6 @@ backend/*.png
 # ── Divers ────────────────────────────────────────────────────────────────────
 *.sqlite3
 .cache/
+# wa-bridge secrets — ne pas commiter
+wa-bridge/.env
+.logs/
