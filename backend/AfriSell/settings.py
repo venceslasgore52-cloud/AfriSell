@@ -73,9 +73,12 @@ TEMPLATES = [
 WSGI_APPLICATION = 'AfriSell.wsgi.application'
 
 # ── Base de données ───────────────────────────────────────────────────────────
+_db_url = config('DATABASE_URL', default=f'sqlite:///{BASE_DIR / "db.sqlite3"}')
+_db_url = _db_url.replace('&channel_binding=require', '').replace('channel_binding=require&', '').replace('?channel_binding=require', '')
+
 DATABASES = {
     'default': dj_database_url.config(
-        default=config('DATABASE_URL', default=f'sqlite:///{BASE_DIR / "db.sqlite3"}'),
+        default=_db_url,
         conn_max_age=600,
     )
 }
