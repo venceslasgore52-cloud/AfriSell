@@ -56,8 +56,11 @@ export default function EditProd() {
           whatsapp_template:  product.whatsapp_template || '',
           image:              null,
         });
-        const img = product.image_url || product.image || null;
-        if (img) setPreview(img);
+        const raw = product.image_url || product.image || null;
+        if (raw) {
+          const API_BASE = import.meta.env.VITE_API_BASE_URL ?? '';
+          setPreview(raw.startsWith('http') ? raw : `${API_BASE}${raw}`);
+        }
       })
       .catch((err) => setErrors({ _global: err.message || 'Produit introuvable.' }))
       .finally(() => setLoading(false));

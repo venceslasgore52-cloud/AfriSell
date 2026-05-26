@@ -30,8 +30,13 @@ function isActive(product) {
   return false;
 }
 
+const API_BASE = import.meta.env.VITE_API_BASE_URL ?? ''
+
 function getImageUrl(product) {
-  return product.image_url || product.image || null;
+  const img = product.image_url || product.image || null;
+  if (!img) return null;
+  if (img.startsWith('http')) return img;       // URL Cloudinary complète
+  return `${API_BASE}${img}`;                   // URL relative → backend Railway
 }
 
 export default function ListProd() {
