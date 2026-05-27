@@ -41,10 +41,13 @@ class CheckoutView(APIView):
         if not plan:
             return Response({'detail': 'Plan introuvable.'}, status=status.HTTP_404_NOT_FOUND)
 
-        # je détermine le provider selon le pays de la boutique si non forcé par le front
-        shop     = getattr(request.user, 'shop', None)
-        country  = shop.country if shop else 'OTHER'
-        provider = serializer.validated_data.get('provider') or detect_gateway_for_user(request.user)
+        shop    = getattr(request.user, 'shop', None)
+        country = shop.country if shop else 'OTHER'
+
+        try:
+            provider = serializer.validated_data.get('provider') or detect_gateway_for_user(request.user)
+        except GatewayError as exc:
+            return Response({'detail': str(exc)}, status=status.HTTP_503_SERVICE_UNAVAILABLE)
 
         from .gateway import _enabled_providers
         if provider not in _enabled_providers():
@@ -53,7 +56,6 @@ class CheckoutView(APIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        # devise et montant automatiques selon pays + provider
         amount, currency = get_amount_and_currency(plan, country, provider)
 
         payment = Payment.objects.create(
