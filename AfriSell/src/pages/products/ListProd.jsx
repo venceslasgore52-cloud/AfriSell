@@ -240,7 +240,7 @@ export default function ListProd() {
                 {/* Image */}
                 <div className="h-44 bg-gradient-to-br from-gray-100 to-gray-50 flex items-center justify-center relative overflow-hidden">
                   {img
-                    ? <img src={img} alt={product.name} className="w-full h-full object-cover" />
+                    ? <img src={img} alt={product.name} className="w-full h-full object-cover" crossOrigin="anonymous" />
                     : <Package size={40} className="text-gray-300" />
                   }
                   <div className={`absolute top-3 right-3 px-2.5 py-1 rounded-full text-xs font-bold
