@@ -36,7 +36,6 @@ class PaystackGateway:
         payload = {
             'email':        payment.user.email,
             'amount':       amount_sub,
-            'currency':     payment.currency,
             'reference':    reference,
             'callback_url': getattr(settings, 'PAYSTACK_CALLBACK_URL', ''),
             'metadata': {
