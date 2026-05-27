@@ -64,11 +64,10 @@ def get_amount_and_currency(plan, country: str, provider: str) -> tuple:
         return int(plan.price_africa * USD_TO_XOF), 'XOF'
 
     if provider == 'paystack':
-        # Paystack supporte NGN, GHS, KES, ZAR, USD
-        CURRENCY_MAP = {'NG': 'NGN', 'GH': 'GHS', 'KE': 'KES', 'ZA': 'ZAR'}
-        currency = CURRENCY_MAP.get(country, 'USD')
-        # pour simplifier on reste en USD — Paystack l'accepte
-        return plan.price_africa, 'USD'
+        # Paystack : NGN par défaut (seule devise active sur tous les comptes)
+        # Les autres devises (GHS, KES, ZAR) nécessitent une activation manuelle
+        USD_TO_NGN = 1600
+        return int(plan.price_africa * USD_TO_NGN), 'NGN'
 
     # Stripe
     if country in XOF_COUNTRIES or country in PAYSTACK_COUNTRIES:
