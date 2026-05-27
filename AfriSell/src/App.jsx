@@ -4,7 +4,8 @@ import { AuthProvider } from './context/AuthContext'
 import { useAuth } from './context/useAuth'
 
 /* ── Pages publiques ──────────────────────────────────── */
-const Home = lazy(() => import('./pages/Home'))
+const Home          = lazy(() => import('./pages/Home'))
+const PrivacyPolicy = lazy(() => import('./pages/PrivacyPolicy'))
 
 /* ── Pages auth ───────────────────────────────────────── */
 const Login            = lazy(() => import('./pages/auth/Login'))
@@ -81,8 +82,9 @@ export default function App() {
         <Suspense fallback={<PageLoader />}>
           <Routes>
 
-            {/* Page d'accueil publique */}
+            {/* Pages publiques */}
             <Route path="/" element={<Home />} />
+            <Route path="/privacy-policy" element={<PrivacyPolicy />} />
 
             {/* Auth — accessible seulement si non connecté */}
             <Route element={<GuestRoute />}>
