@@ -1,3 +1,5 @@
+import logging
+
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 from rest_framework import generics, status
@@ -6,6 +8,8 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from .gateway import get_gateway, detect_gateway_for_user, get_amount_and_currency, GatewayError
+
+logger = logging.getLogger(__name__)
 from .models import Plan, Subscription, Payment, Invoice, WebhookLog, GatewayConfig
 from .serializers import (
     PlanSerializer, SubscriptionSerializer, PaymentSerializer,
@@ -56,23 +60,30 @@ class CheckoutView(APIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        amount, currency = get_amount_and_currency(plan, country, provider)
-
-        payment = Payment.objects.create(
-            user     = request.user,
-            plan     = plan,
-            amount   = amount,
-            currency = currency,
-            provider = provider,
-            status   = 'pending',
-        )
-
         try:
+            amount, currency = get_amount_and_currency(plan, country, provider)
+
+            payment = Payment.objects.create(
+                user     = request.user,
+                plan     = plan,
+                amount   = amount,
+                currency = currency,
+                provider = provider,
+                status   = 'pending',
+            )
+
             result = get_gateway(provider).create_checkout(payment, request)
+
         except (GatewayError, Exception) as exc:
-            payment.status         = 'failed'
-            payment.failure_reason = str(exc)
-            payment.save(update_fields=['status', 'failure_reason'])
+            logger.exception('[checkout] Erreur provider=%s plan=%s user=%s : %s',
+                             provider, plan.slug, request.user.id, exc)
+            # met le paiement en failed s'il a été créé
+            try:
+                payment.status         = 'failed'
+                payment.failure_reason = str(exc)
+                payment.save(update_fields=['status', 'failure_reason'])
+            except Exception:
+                pass
             return Response({'detail': str(exc)}, status=status.HTTP_502_BAD_GATEWAY)
 
         return Response({

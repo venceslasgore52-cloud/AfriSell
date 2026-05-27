@@ -220,10 +220,12 @@ class Payment(models.Model):
     ]
 
     PROVIDER_CHOICES = [
-        ('stripe',    'Stripe'),
-        ('cinetpay',  'CinetPay'),
-        ('paystack', 'Paystack'),
-        ('manual',    'Manuel'),
+        ('stripe',         'Stripe'),
+        ('carte_bancaire', 'Carte bancaire'),
+        ('google_pay',     'Google Pay'),
+        ('cinetpay',       'CinetPay'),
+        ('paystack',       'Paystack'),
+        ('manual',         'Manuel'),
     ]
 
     id           = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
