@@ -44,7 +44,6 @@ class PaystackGateway:
                 'plan':       payment.plan.name,
                 'user_id':    str(payment.user.id),
             },
-            'channels': ['card', 'mobile_money', 'bank', 'ussd'],
         }
 
         resp = requests.post(
