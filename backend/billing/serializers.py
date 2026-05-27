@@ -94,7 +94,7 @@ class InvoiceSerializer(serializers.ModelSerializer):
 class CheckoutRequestSerializer(serializers.Serializer):
     plan_slug = serializers.ChoiceField(choices=['starter', 'pro', 'business'])
     provider  = serializers.ChoiceField(
-        choices=['stripe', 'carte_bancaire', 'google_pay', 'cinetpay', 'geniuspay'],
+        choices=['stripe', 'carte_bancaire', 'google_pay', 'cinetpay', 'paystack'],
         required=False,
     )
 

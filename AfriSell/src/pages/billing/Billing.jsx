@@ -286,7 +286,7 @@ export default function Billing() {
 
       <p className="text-xs text-gray-400 max-w-3xl">
         Sans engagement · Annulation à tout moment ·
-        Paiement sécurisé par Stripe / GeniusPay / CinetPay
+        Paiement sécurisé par Stripe / Paystack / CinetPay
       </p>
 
       {checkoutPlan && (

@@ -107,7 +107,7 @@ export default function GatewaySelect({ plan, onClose }) {
       setEnabledProviders(providers.length ? providers : ['google_pay'])
       // sélectionne le premier actif pertinent
       const prefer = isAfrica
-        ? ['cinetpay', 'geniuspay', 'google_pay', 'stripe', 'carte_bancaire']
+        ? ['cinetpay', 'paystack', 'google_pay', 'stripe', 'carte_bancaire']
         : ['google_pay', 'carte_bancaire', 'stripe']
       const first = prefer.find(p => providers.includes(p)) || providers[0] || 'google_pay'
       setSelected(first)

@@ -10,7 +10,7 @@ class GatewayConfig(models.Model):
         ('google_pay', 'Google Pay'),
         ('stripe',     'Stripe'),
         ('cinetpay',   'CinetPay'),
-        ('geniuspay',  'GeniusPay'),
+        ('paystack',  'Paystack'),
     ]
     provider   = models.CharField(max_length=20, unique=True, choices=PROVIDER_CHOICES)
     is_enabled = models.BooleanField(default=False)
@@ -83,7 +83,7 @@ class Plan(models.Model):
     # ── IDs provider paiement ────────────────────────────────────────────────
     stripe_price_id      = models.CharField(max_length=100, blank=True)
     stripe_product_id    = models.CharField(max_length=100, blank=True)
-    geniuspay_plan_id    = models.CharField(max_length=100, blank=True)
+    paystack_plan_id    = models.CharField(max_length=100, blank=True)
     cinetpay_plan_id     = models.CharField(max_length=100, blank=True)
 
     is_active  = models.BooleanField(default=True)
@@ -158,7 +158,7 @@ class Subscription(models.Model):
     PROVIDER_CHOICES = [
         ('stripe',    'Stripe'),
         ('cinetpay',  'CinetPay'),
-        ('geniuspay', 'GeniusPay'),
+        ('paystack', 'Paystack'),
         ('manual',    'Manuel (admin)'),
     ]
 
@@ -221,7 +221,7 @@ class Payment(models.Model):
     PROVIDER_CHOICES = [
         ('stripe',    'Stripe'),
         ('cinetpay',  'CinetPay'),
-        ('geniuspay', 'GeniusPay'),
+        ('paystack', 'Paystack'),
         ('manual',    'Manuel'),
     ]
 
@@ -294,7 +294,7 @@ class WebhookLog(models.Model):
     PROVIDER_CHOICES = [
         ('stripe',    'Stripe'),
         ('cinetpay',  'CinetPay'),
-        ('geniuspay', 'GeniusPay'),
+        ('paystack', 'Paystack'),
     ]
 
     id          = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)

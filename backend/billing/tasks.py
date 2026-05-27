@@ -34,7 +34,7 @@ def expire_subscriptions(self):
     qs = Subscription.objects.filter(
         status='active',
         end_date__lt=timezone.now(),
-        provider__in=['cinetpay', 'geniuspay', 'manual'],
+        provider__in=['cinetpay', 'paystack', 'manual'],
     )
 
     count = 0
@@ -63,7 +63,7 @@ def notify_expiring_soon(self):
         auto_renew=True,
         end_date__lte=deadline,
         end_date__gt=timezone.now(),
-        provider__in=['cinetpay', 'geniuspay'],
+        provider__in=['cinetpay', 'paystack'],
     ).select_related('user', 'plan', 'user__shop')
 
     for sub in qs:

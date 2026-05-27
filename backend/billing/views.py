@@ -249,12 +249,12 @@ _GATEWAY_DEFS = [
         'key_check':     lambda s: bool(s.get('CINETPAY_API_KEY', '')) and s.get('CINETPAY_API_KEY') != 'ta-cle-cinetpay',
     },
     {
-        'provider':      'geniuspay',
-        'label':         'GeniusPay',
+        'provider':      'paystack',
+        'label':         'Paystack',
         'description':   'Paiement mobile Afrique francophone (XOF)',
         'color':         '#FF6B35',
-        'required_vars': ['GENIUSPAY_API_KEY', 'GENIUSPAY_SITE_ID'],
-        'key_check':     lambda s: bool(s.get('GENIUSPAY_API_KEY', '')) and s.get('GENIUSPAY_API_KEY') != 'ta-cle-geniuspay',
+        'required_vars': ['PAYSTACK_API_KEY', 'PAYSTACK_SITE_ID'],
+        'key_check':     lambda s: bool(s.get('PAYSTACK_API_KEY', '')) and s.get('PAYSTACK_API_KEY') != 'ta-cle-geniuspay',
     },
 ]
 
@@ -273,7 +273,7 @@ class AdminGatewayListView(APIView):
         env = {k: getattr(djsettings, k, '') for k in [
             'STRIPE_SECRET_KEY', 'STRIPE_PUBLISHABLE_KEY', 'STRIPE_WEBHOOK_SECRET',
             'CINETPAY_API_KEY', 'CINETPAY_SITE_ID',
-            'GENIUSPAY_API_KEY', 'GENIUSPAY_SITE_ID',
+            'PAYSTACK_API_KEY', 'PAYSTACK_SITE_ID',
         ]}
         rows = []
         for gw in _GATEWAY_DEFS:
@@ -311,17 +311,17 @@ class AdminGatewayToggleView(APIView):
         return Response({'provider': provider, 'is_enabled': config.is_enabled})
 
 @method_decorator(csrf_exempt, name='dispatch')
-class GeniusPayWebhookView(APIView):
+class PaystackWebhookView(APIView):
     authentication_classes = []
     permission_classes     = []
 
     def post(self, request):
         # même flow que CinetPay — form POST, je vérifie le site_id
         data = request.POST.dict() or request.data
-        log  = WebhookLog.objects.create(provider='geniuspay', payload=data)
+        log  = WebhookLog.objects.create(provider='paystack', payload=data)
         try:
-            from .geniuspay_gateway import GeniusPayGateway
-            gw = GeniusPayGateway()
+            from .paystack_gateway import PaystackGateway
+            gw = PaystackGateway()
             if not gw.verify_signature(data):
                 log.error = 'signature invalide'
                 log.save(update_fields=['error'])

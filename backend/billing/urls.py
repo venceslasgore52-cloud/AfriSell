@@ -5,7 +5,7 @@ from .views import (
     MySubscriptionView,
     PaymentHistoryView,
     InvoiceListView, InvoiceDetailView,
-    StripeWebhookView, CinetPayWebhookView, GeniusPayWebhookView,
+    StripeWebhookView, CinetPayWebhookView, PaystackWebhookView,
     EnabledGatewayListView,
     AdminGatewayListView, AdminGatewayToggleView,
 )
@@ -32,7 +32,7 @@ urlpatterns = [
     # Webhooks — pas de prefix /api/ pour que les providers y accèdent directement
     path('webhooks/stripe/',    StripeWebhookView.as_view(),    name='webhook-stripe'),
     path('webhooks/cinetpay/',  CinetPayWebhookView.as_view(),  name='webhook-cinetpay'),
-    path('webhooks/geniuspay/', GeniusPayWebhookView.as_view(), name='webhook-geniuspay'),
+    path('webhooks/paystack/', PaystackWebhookView.as_view(), name='webhook-paystack'),
 
     # Admin — gestion des passerelles
     path('admin/gateways/',             AdminGatewayListView.as_view(),   name='admin-gateways'),

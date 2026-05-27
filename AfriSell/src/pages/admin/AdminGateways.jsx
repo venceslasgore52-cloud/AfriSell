@@ -23,7 +23,7 @@ const PROVIDER_ICONS = {
       <text x="20" y="26" textAnchor="middle" fill="white" fontSize="12" fontWeight="bold">CP</text>
     </svg>
   ),
-  geniuspay: () => (
+  paystack: () => (
     <svg className="w-7 h-7" viewBox="0 0 40 40" fill="none">
       <rect width="40" height="40" rx="8" fill="#FF6B35"/>
       <text x="20" y="26" textAnchor="middle" fill="white" fontSize="11" fontWeight="bold">GP</text>
