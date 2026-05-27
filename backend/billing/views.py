@@ -46,6 +46,13 @@ class CheckoutView(APIView):
         country  = shop.country if shop else 'OTHER'
         provider = serializer.validated_data.get('provider') or detect_gateway_for_user(request.user)
 
+        from .gateway import _enabled_providers
+        if provider not in _enabled_providers():
+            return Response(
+                {'detail': f'La passerelle « {provider} » n\'est pas activée.'},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
         # devise et montant automatiques selon pays + provider
         amount, currency = get_amount_and_currency(plan, country, provider)
 
@@ -223,6 +230,11 @@ class EnabledGatewayListView(APIView):
 
 # ── Admin — Gestion des passerelles ──────────────────────────────────────────
 
+def _is_real_key(val: str, prefix: str) -> bool:
+    """Vrai seulement si la clé est présente ET n'est pas un placeholder comme sk_live_..."""
+    return bool(val) and val.startswith(prefix) and '...' not in val
+
+
 _GATEWAY_DEFS = [
     {
         'provider':      'google_pay',
@@ -230,7 +242,7 @@ _GATEWAY_DEFS = [
         'description':   'Paiement en 1 clic via Google (fonctionne via Stripe)',
         'color':         '#4285F4',
         'required_vars': ['STRIPE_SECRET_KEY', 'STRIPE_PUBLISHABLE_KEY'],
-        'key_check':     lambda s: s.get('STRIPE_SECRET_KEY', '').startswith('sk_'),
+        'key_check':     lambda s: _is_real_key(s.get('STRIPE_SECRET_KEY', ''), 'sk_'),
     },
     {
         'provider':      'stripe',
@@ -238,7 +250,7 @@ _GATEWAY_DEFS = [
         'description':   'Carte bancaire internationale (Visa, Mastercard, AMEX, SEPA)',
         'color':         '#635BFF',
         'required_vars': ['STRIPE_SECRET_KEY', 'STRIPE_WEBHOOK_SECRET'],
-        'key_check':     lambda s: s.get('STRIPE_SECRET_KEY', '').startswith('sk_'),
+        'key_check':     lambda s: _is_real_key(s.get('STRIPE_SECRET_KEY', ''), 'sk_'),
     },
     {
         'provider':      'cinetpay',
@@ -246,15 +258,15 @@ _GATEWAY_DEFS = [
         'description':   "Mobile Money Afrique de l'Ouest (Orange Money, MTN, Wave)",
         'color':         '#E2291B',
         'required_vars': ['CINETPAY_API_KEY', 'CINETPAY_SITE_ID'],
-        'key_check':     lambda s: bool(s.get('CINETPAY_API_KEY', '')) and s.get('CINETPAY_API_KEY') != 'ta-cle-cinetpay',
+        'key_check':     lambda s: bool(s.get('CINETPAY_API_KEY', '')) and '...' not in s.get('CINETPAY_API_KEY', ''),
     },
     {
         'provider':      'paystack',
         'label':         'Paystack',
-        'description':   'Mobile Money Afrique (Nigeria, Ghana, Kenya, Côte d\'Ivoire…)',
-        'color':         '#FF6B35',
+        'description':   "Mobile Money Afrique (Nigeria, Ghana, Kenya, Côte d'Ivoire…)",
+        'color':         '#00C3F7',
         'required_vars': ['PAYSTACK_SECRET_KEY', 'PAYSTACK_PUBLIC_KEY'],
-        'key_check':     lambda s: bool(s.get('PAYSTACK_SECRET_KEY', '')) and s.get('PAYSTACK_SECRET_KEY', '').startswith('sk_'),
+        'key_check':     lambda s: _is_real_key(s.get('PAYSTACK_SECRET_KEY', ''), 'sk_'),
     },
 ]
 

@@ -218,12 +218,11 @@ STRIPE_WEBHOOK_SECRET  = config('STRIPE_WEBHOOK_SECRET', default='')
 STRIPE_SUCCESS_URL     = config('STRIPE_SUCCESS_URL', default='http://localhost:5173/billing/success')
 STRIPE_CANCEL_URL      = config('STRIPE_CANCEL_URL', default='http://localhost:5173/billing/cancel')
 
-# ── GeniusPay ─────────────────────────────────────────────────────────────────
-GENIUSPAY_API_KEY    = config('GENIUSPAY_API_KEY', default='')
-GENIUSPAY_SITE_ID    = config('GENIUSPAY_SITE_ID', default='')
-GENIUSPAY_NOTIFY_URL = config('GENIUSPAY_NOTIFY_URL', default='')
-GENIUSPAY_RETURN_URL = config('GENIUSPAY_RETURN_URL', default='')
-GENIUSPAY_CANCEL_URL = config('GENIUSPAY_CANCEL_URL', default='')
+# ── Paystack ──────────────────────────────────────────────────────────────────
+PAYSTACK_SECRET_KEY    = config('PAYSTACK_SECRET_KEY',    default='')
+PAYSTACK_PUBLIC_KEY    = config('PAYSTACK_PUBLIC_KEY',    default='')
+PAYSTACK_WEBHOOK_SECRET = config('PAYSTACK_WEBHOOK_SECRET', default='')
+PAYSTACK_CALLBACK_URL  = config('PAYSTACK_CALLBACK_URL',  default='http://localhost:5173/billing/success')
 
 # ── CinetPay ──────────────────────────────────────────────────────────────────
 CINETPAY_API_KEY    = config('CINETPAY_API_KEY', default='')

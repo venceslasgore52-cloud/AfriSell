@@ -1,60 +1,70 @@
 import { useState, useEffect } from 'react'
-import { CreditCard, Smartphone, Loader2, X, ShieldCheck, Lock } from 'lucide-react'
+import { CreditCard, Smartphone, Loader2, X, ShieldCheck, Lock, CheckCircle2 } from 'lucide-react'
 import { useAuth } from '../../context/useAuth'
 import { api } from '../../services/api'
 
 /* ── Icônes providers ─────────────────────────────────────────────────────── */
 function CardIcon() {
   return (
-    <svg className="w-6 h-6" viewBox="0 0 40 40" fill="none">
-      <rect width="40" height="40" rx="8" fill="#1A1A2E"/>
-      <rect x="6" y="12" width="28" height="18" rx="3" fill="#16213E" stroke="#E94560" strokeWidth="1"/>
-      <rect x="6" y="17" width="28" height="5" fill="#E94560" opacity="0.8"/>
-      <rect x="8" y="25" width="8" height="2" rx="1" fill="#fff" opacity="0.6"/>
-      <rect x="18" y="25" width="5" height="2" rx="1" fill="#fff" opacity="0.4"/>
-    </svg>
-  )
-}
-function StripeIcon() {
-  return (
-    <svg className="w-6 h-6" viewBox="0 0 40 40" fill="none">
-      <rect width="40" height="40" rx="8" fill="#635BFF"/>
-      <path d="M19.2 16.4c0-1 .8-1.4 2.1-1.4 1.9 0 4.2.6 6 1.6V12c-2-.8-4-1.2-6-1.2-4.9 0-8.2 2.6-8.2 6.9 0 6.7 9.2 5.6 9.2 8.5 0 1.2-1 1.6-2.4 1.6-2.1 0-4.8-.9-6.9-2V30c2.3 1 4.7 1.5 6.9 1.5 5 0 8.5-2.5 8.5-6.9-.1-7.3-9.2-6-9.2-8.2z" fill="white"/>
-    </svg>
-  )
-}
-function CinetPayIcon() {
-  return (
-    <svg className="w-6 h-6" viewBox="0 0 40 40" fill="none">
-      <rect width="40" height="40" rx="8" fill="#E2291B"/>
-      <text x="20" y="26" textAnchor="middle" fill="white" fontSize="12" fontWeight="bold">CP</text>
-    </svg>
-  )
-}
-function GooglePayIcon() {
-  return (
-    <svg className="w-6 h-6" viewBox="0 0 40 40" fill="none">
-      <rect width="40" height="40" rx="8" fill="#fff" stroke="#E8EAED" strokeWidth="1.5"/>
-      <text x="20" y="15" textAnchor="middle" fill="#4285F4" fontSize="6" fontWeight="800">G</text>
-      <text x="20" y="23" textAnchor="middle" fill="#34A853" fontSize="6" fontWeight="700">Pay</text>
-      <circle cx="10" cy="20" r="3" fill="#EA4335"/>
-      <circle cx="16" cy="20" r="3" fill="#FBBC05"/>
-      <circle cx="22" cy="20" r="3" fill="#4285F4"/>
-    </svg>
-  )
-}
-function PaystackIcon() {
-  return (
-    <svg className="w-6 h-6" viewBox="0 0 40 40" fill="none">
-      <rect width="40" height="40" rx="8" fill="#00C3F7"/>
-      <rect x="8" y="13" width="24" height="4" rx="2" fill="white"/>
-      <rect x="8" y="19" width="24" height="4" rx="2" fill="white" opacity="0.7"/>
-      <rect x="8" y="25" width="16" height="4" rx="2" fill="white" opacity="0.4"/>
+    <svg className="w-8 h-8" viewBox="0 0 48 48" fill="none">
+      <rect width="48" height="48" rx="10" fill="#0F172A"/>
+      <rect x="7" y="14" width="34" height="22" rx="4" fill="#1E293B"/>
+      <rect x="7" y="20" width="34" height="6" fill="#3B82F6"/>
+      <rect x="10" y="30" width="10" height="2.5" rx="1.25" fill="white" opacity="0.7"/>
+      <rect x="22" y="30" width="6" height="2.5" rx="1.25" fill="white" opacity="0.4"/>
+      <rect x="30" y="30" width="4" height="2.5" rx="1.25" fill="white" opacity="0.3"/>
+      <rect x="10" y="16" width="7" height="5" rx="1.5" fill="#FBBF24" opacity="0.9"/>
     </svg>
   )
 }
 
-/* ── Config des 4 providers ───────────────────────────────────────────────── */
+function StripeIcon() {
+  return (
+    <svg className="w-8 h-8" viewBox="0 0 48 48" fill="none">
+      <rect width="48" height="48" rx="10" fill="#635BFF"/>
+      <path d="M23 19.2c0-1.2.9-1.7 2.4-1.7 2.2 0 5 .7 7.2 2V14c-2.4-1-4.8-1.4-7.2-1.4-5.9 0-9.8 3.1-9.8 8.3 0 8 11 6.7 11 10.2 0 1.4-1.2 1.9-2.9 1.9-2.5 0-5.7-1-8.2-2.4V36c2.7 1.2 5.6 1.8 8.2 1.8 6 0 10.2-3 10.2-8.3-.1-8.7-11.1-7.2-10.9-10.3z" fill="white"/>
+    </svg>
+  )
+}
+
+function CinetPayIcon() {
+  return (
+    <svg className="w-8 h-8" viewBox="0 0 48 48" fill="none">
+      <rect width="48" height="48" rx="10" fill="#CC1B0E"/>
+      <circle cx="24" cy="24" r="11" fill="white" opacity="0.15"/>
+      <path d="M24 13C18 13 13 18 13 24s5 11 11 11 11-5 11-11-5-11-11-11zm0 19c-4.4 0-8-3.6-8-8s3.6-8 8-8 8 3.6 8 8-3.6 8-8 8z" fill="white" opacity="0.8"/>
+      <path d="M27.5 20.5h-7a.5.5 0 000 1h7a.5.5 0 000-1zm0 3.5h-7a.5.5 0 000 1h7a.5.5 0 000-1zm-2 3.5h-5a.5.5 0 000 1h5a.5.5 0 000-1z" fill="white"/>
+      <text x="24" y="27" textAnchor="middle" fill="white" fontSize="9" fontWeight="800" fontFamily="system-ui">CP</text>
+    </svg>
+  )
+}
+
+function GooglePayIcon() {
+  return (
+    <svg className="w-8 h-8" viewBox="0 0 48 48" fill="none">
+      <rect width="48" height="48" rx="10" fill="white" stroke="#E2E8F0" strokeWidth="1.5"/>
+      <text x="24" y="19" textAnchor="middle" fill="#4285F4" fontSize="8" fontWeight="800" fontFamily="'Google Sans', system-ui">G</text>
+      <text x="24" y="29" textAnchor="middle" fill="#3C4043" fontSize="7.5" fontWeight="600" fontFamily="'Google Sans', system-ui">Pay</text>
+      <circle cx="10" cy="37" r="3.5" fill="#EA4335"/>
+      <circle cx="18" cy="37" r="3.5" fill="#FBBC04"/>
+      <circle cx="26" cy="37" r="3.5" fill="#34A853"/>
+      <circle cx="34" cy="37" r="3.5" fill="#4285F4"/>
+    </svg>
+  )
+}
+
+function PaystackIcon() {
+  return (
+    <svg className="w-8 h-8" viewBox="0 0 48 48" fill="none">
+      <rect width="48" height="48" rx="10" fill="#011B33"/>
+      <rect x="9" y="14" width="30" height="5" rx="2.5" fill="#00C3F7"/>
+      <rect x="9" y="21.5" width="30" height="5" rx="2.5" fill="#00C3F7" opacity="0.65"/>
+      <rect x="9" y="29" width="20" height="5" rx="2.5" fill="#00C3F7" opacity="0.35"/>
+    </svg>
+  )
+}
+
+/* ── Config providers ─────────────────────────────────────────────────────── */
 const AFRICA_CODES = ['CI','SN','ML','BF','GN','TG','BJ','NE','CM','GH','NG','CD','MG','RW','KE','TZ','ET']
 
 const GATEWAYS = (isAfrica) => [
@@ -64,83 +74,94 @@ const GATEWAYS = (isAfrica) => [
     subtitle:   'Visa · Mastercard · AMEX',
     icon:       <CardIcon />,
     badge:      isAfrica ? null : 'Recommandé',
-    badgeColor: 'bg-blue-100 text-blue-700',
+    badgeColor: 'bg-blue-50 text-blue-600 border border-blue-200',
     methods:    ['Visa', 'Mastercard', 'American Express'],
-    typeIcon:   <CreditCard size={16} />,
+    color:      '#3B82F6',
+    typeIcon:   <CreditCard size={15} />,
   },
   {
     id:       'stripe',
     label:    'Stripe Checkout',
-    subtitle: 'Paiement en ligne sécurisé',
+    subtitle: 'Paiement international sécurisé',
     icon:     <StripeIcon />,
     badge:    null,
     methods:  ['Visa', 'Mastercard', 'SEPA', 'Link'],
-    typeIcon: <CreditCard size={16} />,
+    color:    '#635BFF',
+    typeIcon: <CreditCard size={15} />,
   },
   {
     id:         'cinetpay',
     label:      'CinetPay',
-    subtitle:   'Mobile Money Afrique de l\'Ouest',
+    subtitle:   'Mobile Money · CI, SN, ML, BF…',
     icon:       <CinetPayIcon />,
-    badge:      isAfrica ? 'Recommandé CI/SN/ML…' : null,
-    badgeColor: 'bg-green-100 text-green-700',
-    methods:    ['Orange Money', 'MTN Mobile Money', 'Wave', 'Moov Money'],
-    typeIcon:   <Smartphone size={16} />,
+    badge:      isAfrica ? 'Recommandé' : null,
+    badgeColor: 'bg-orange-50 text-orange-600 border border-orange-200',
+    methods:    ['Orange Money', 'MTN MoMo', 'Wave', 'Moov Money'],
+    color:      '#CC1B0E',
+    typeIcon:   <Smartphone size={15} />,
   },
   {
     id:         'paystack',
     label:      'Paystack',
-    subtitle:   'Mobile Money · Nigeria, Ghana, Kenya…',
+    subtitle:   'Mobile Money · NG, GH, KE, ZA…',
     icon:       <PaystackIcon />,
-    badge:      isAfrica ? 'Recommandé NG/GH/KE' : null,
-    badgeColor: 'bg-cyan-100 text-cyan-700',
-    methods:    ['Mobile Money', 'Carte', 'USSD', 'Bank'],
-    typeIcon:   <Smartphone size={16} />,
+    badge:      isAfrica ? 'Recommandé' : null,
+    badgeColor: 'bg-cyan-50 text-cyan-600 border border-cyan-200',
+    methods:    ['Mobile Money', 'Carte', 'USSD', 'Virement'],
+    color:      '#00C3F7',
+    typeIcon:   <Smartphone size={15} />,
   },
   {
     id:       'google_pay',
     label:    'Google Pay',
-    subtitle: 'Payer en un clic avec Google',
+    subtitle: 'Payer en 1 clic avec Google',
     icon:     <GooglePayIcon />,
     badge:    null,
     methods:  ['Google Pay', 'Visa', 'Mastercard'],
-    typeIcon: <CreditCard size={16} />,
+    color:    '#4285F4',
+    typeIcon: <CreditCard size={15} />,
   },
 ]
 
 /* ── Composant principal ──────────────────────────────────────────────────── */
 export default function GatewaySelect({ plan, onClose }) {
   const { user } = useAuth()
+  const isAfrica    = AFRICA_CODES.includes(user?.country?.toUpperCase() ?? '')
+  const price       = isAfrica ? plan.price_africa : plan.price_global
+  const allGateways = GATEWAYS(isAfrica)
 
-  const isAfrica     = AFRICA_CODES.includes(user?.country?.toUpperCase() ?? '')
-  const price        = isAfrica ? plan.price_africa : plan.price_global
-  const allGateways  = GATEWAYS(isAfrica)
-
-  const [enabledProviders, setEnabledProviders] = useState(['google_pay'])
-  const [selected, setSelected] = useState('google_pay')
-  const [loading, setLoading]   = useState(false)
-  const [error, setError]       = useState('')
+  const [enabledProviders, setEnabledProviders] = useState([])
+  const [selected, setSelected]                 = useState(null)
+  const [loading, setLoading]                   = useState(false)
+  const [fetchingGw, setFetchingGw]             = useState(true)
+  const [error, setError]                       = useState('')
 
   useEffect(() => {
-    api.get('/api/billing/gateways/').then(data => {
-      const providers = Array.isArray(data) ? data : []
-      // fallback : affiche tous les gateways si la DB n'est pas encore configurée
-      const active = providers.length ? providers : ['carte_bancaire', 'stripe', 'cinetpay', 'paystack', 'google_pay']
-      setEnabledProviders(active)
-      const prefer = isAfrica
-        ? ['cinetpay', 'paystack', 'google_pay', 'stripe', 'carte_bancaire']
-        : ['google_pay', 'carte_bancaire', 'stripe']
-      const first = prefer.find(p => active.includes(p)) || active[0] || 'google_pay'
-      setSelected(first)
-    }).catch(() => {
-      // en cas d'erreur réseau : affiche tout
-      setEnabledProviders(['carte_bancaire', 'stripe', 'cinetpay', 'paystack', 'google_pay'])
-    })
+    api.get('/api/billing/gateways/')
+      .then(data => {
+        const providers = Array.isArray(data) ? data : []
+        const active = providers.length
+          ? providers
+          : ['carte_bancaire', 'stripe', 'cinetpay', 'paystack', 'google_pay']
+        setEnabledProviders(active)
+        const prefer = isAfrica
+          ? ['cinetpay', 'paystack', 'carte_bancaire', 'stripe', 'google_pay']
+          : ['google_pay', 'carte_bancaire', 'stripe']
+        setSelected(prefer.find(p => active.includes(p)) || active[0] || null)
+      })
+      .catch(() => {
+        const fallback = ['carte_bancaire', 'stripe', 'cinetpay', 'paystack', 'google_pay']
+        setEnabledProviders(fallback)
+        setSelected(isAfrica ? 'cinetpay' : 'google_pay')
+      })
+      .finally(() => setFetchingGw(false))
   }, [isAfrica])
 
   const gateways = allGateways.filter(g => enabledProviders.includes(g.id))
+  const activeGateway = gateways.find(g => g.id === selected)
 
   const handlePay = async () => {
+    if (!selected) return
     setLoading(true)
     setError('')
     try {
@@ -151,7 +172,7 @@ export default function GatewaySelect({ plan, onClose }) {
       if (res?.checkout_url) {
         window.location.href = res.checkout_url
       } else {
-        setError('Lien de paiement non reçu. Réessayez.')
+        setError('Lien de paiement non reçu. Veuillez réessayer.')
       }
     } catch (err) {
       setError(err.message || 'Erreur lors de la création du paiement.')
@@ -160,93 +181,121 @@ export default function GatewaySelect({ plan, onClose }) {
     }
   }
 
-  const activeGateway = gateways.find(g => g.id === selected)
-
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
-      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-lg flex flex-col max-h-[90vh]">
+    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/60 backdrop-blur-sm p-0 sm:p-4">
+      <div className="bg-white w-full sm:max-w-md rounded-t-3xl sm:rounded-2xl shadow-2xl flex flex-col max-h-[92vh] sm:max-h-[88vh]">
 
         {/* Header */}
-        <div className="flex-shrink-0 flex items-center justify-between px-6 py-4 border-b border-gray-100 bg-gray-50/50">
-          <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-green-100 flex items-center justify-center">
-              <CreditCard size={18} className="text-green-600" />
-            </div>
+        <div className="shrink-0 px-5 pt-5 pb-4">
+          {/* Drag handle (mobile) */}
+          <div className="w-10 h-1 bg-gray-200 rounded-full mx-auto mb-4 sm:hidden" />
+          <div className="flex items-start justify-between gap-3">
             <div>
-              <h3 className="font-bold text-gray-900">Passer au plan {plan.name}</h3>
-              <p className="text-xs text-gray-400">{price} $/mois · Sans engagement</p>
+              <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-1">
+                Abonnement
+              </p>
+              <h3 className="text-lg font-bold text-gray-900">
+                Plan {plan.name}
+              </h3>
+              <p className="text-sm text-gray-500 mt-0.5">
+                <span className="font-bold text-gray-900">{price} $</span>
+                {' '}/ mois · Sans engagement
+              </p>
             </div>
+            <button
+              onClick={onClose}
+              className="p-2 hover:bg-gray-100 rounded-xl transition text-gray-400 hover:text-gray-700 shrink-0"
+            >
+              <X size={18} />
+            </button>
           </div>
-          <button
-            onClick={onClose}
-            className="p-1.5 hover:bg-gray-200 rounded-lg transition text-gray-400 hover:text-gray-700"
-          >
-            <X size={16} />
-          </button>
-        </div>
-
-        <div className="p-6 overflow-y-auto flex-1">
-          {error && (
-            <div className="mb-4 px-4 py-3 bg-red-50 border border-red-200 rounded-xl text-red-600 text-sm">
-              {error}
-            </div>
-          )}
 
           {isAfrica && (
-            <div className="mb-4 px-3 py-2.5 bg-green-50 border border-green-200 rounded-xl text-xs text-green-700 flex items-center gap-2">
+            <div className="mt-3 flex items-center gap-2 px-3 py-2 bg-emerald-50 border border-emerald-200 rounded-xl">
               <span className="text-base">🌍</span>
-              <span><strong>Prix Afrique</strong> — vous bénéficiez des tarifs réduits.</span>
+              <span className="text-xs text-emerald-700 font-medium">
+                Prix Afrique appliqué — tarif préférentiel
+              </span>
+            </div>
+          )}
+        </div>
+
+        <div className="h-px bg-gray-100 mx-5" />
+
+        {/* Body */}
+        <div className="flex-1 overflow-y-auto px-5 py-4">
+          {error && (
+            <div className="mb-4 px-4 py-3 bg-red-50 border border-red-200 rounded-xl text-red-600 text-sm flex items-start gap-2">
+              <span className="mt-0.5">⚠️</span>
+              <span>{error}</span>
             </div>
           )}
 
-          <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-3">
-            Choisir le mode de paiement
+          <p className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-3">
+            Mode de paiement
           </p>
 
-          {/* Liste des 4 providers */}
-          <div className="space-y-2.5 mb-5">
-            {gateways.map((gw) => (
-              <button
-                key={gw.id}
-                type="button"
-                onClick={() => setSelected(gw.id)}
-                className={`w-full flex items-center gap-4 p-4 rounded-xl border-2 transition-all text-left
-                  ${selected === gw.id
-                    ? 'border-green-400 bg-green-50 shadow-sm'
-                    : 'border-gray-100 bg-white hover:border-gray-200 hover:bg-gray-50'
-                  }`}
-              >
-                <div className={`w-4 h-4 rounded-full border-2 flex-shrink-0 flex items-center justify-center
-                  ${selected === gw.id ? 'border-green-500' : 'border-gray-300'}`}>
-                  {selected === gw.id && <div className="w-2 h-2 rounded-full bg-green-500" />}
-                </div>
+          {fetchingGw ? (
+            <div className="flex items-center justify-center py-8">
+              <Loader2 size={22} className="animate-spin text-gray-300" />
+            </div>
+          ) : (
+            <div className="space-y-2 mb-5">
+              {gateways.map((gw) => {
+                const isSelected = selected === gw.id
+                return (
+                  <button
+                    key={gw.id}
+                    type="button"
+                    onClick={() => setSelected(gw.id)}
+                    className={`w-full flex items-center gap-3.5 px-4 py-3.5 rounded-2xl border-2 transition-all text-left
+                      ${isSelected
+                        ? 'border-gray-900 bg-gray-900 shadow-lg'
+                        : 'border-gray-100 bg-white hover:border-gray-200 hover:bg-gray-50/70'
+                      }`}
+                  >
+                    <div className="shrink-0">{gw.icon}</div>
 
-                <div className="shrink-0">{gw.icon}</div>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <span className={`font-semibold text-sm ${isSelected ? 'text-white' : 'text-gray-900'}`}>
+                          {gw.label}
+                        </span>
+                        {gw.badge && (
+                          <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
+                            isSelected
+                              ? 'bg-white/20 text-white border border-white/30'
+                              : gw.badgeColor
+                          }`}>
+                            {gw.badge}
+                          </span>
+                        )}
+                      </div>
+                      <p className={`text-xs mt-0.5 ${isSelected ? 'text-gray-300' : 'text-gray-400'}`}>
+                        {gw.subtitle}
+                      </p>
+                    </div>
 
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2 flex-wrap">
-                    <span className="font-semibold text-sm text-gray-900">{gw.label}</span>
-                    {gw.badge && (
-                      <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${gw.badgeColor}`}>
-                        {gw.badge}
-                      </span>
-                    )}
-                  </div>
-                  <p className="text-xs text-gray-400 mt-0.5">{gw.subtitle}</p>
-                </div>
-
-                <div className="shrink-0 text-gray-300">{gw.typeIcon}</div>
-              </button>
-            ))}
-          </div>
+                    <div className={`shrink-0 w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all ${
+                      isSelected ? 'border-white bg-white' : 'border-gray-200'
+                    }`}>
+                      {isSelected && <CheckCircle2 size={14} className="text-gray-900" />}
+                    </div>
+                  </button>
+                )
+              })}
+            </div>
+          )}
 
           {/* Méthodes acceptées */}
           {activeGateway?.methods && (
-            <div className="mb-5 px-4 py-3 bg-gray-50 rounded-xl border border-gray-100">
-              <p className="text-xs text-gray-500 mb-2 font-medium">Méthodes acceptées :</p>
+            <div className="mb-5">
+              <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-2">
+                Méthodes acceptées
+              </p>
               <div className="flex flex-wrap gap-1.5">
                 {activeGateway.methods.map((m) => (
-                  <span key={m} className="text-xs bg-white border border-gray-200 text-gray-600 px-2.5 py-1 rounded-lg font-medium">
+                  <span key={m} className="inline-flex items-center text-xs bg-gray-50 border border-gray-200 text-gray-600 px-3 py-1 rounded-lg font-medium">
                     {m}
                   </span>
                 ))}
@@ -254,43 +303,39 @@ export default function GatewaySelect({ plan, onClose }) {
             </div>
           )}
 
-          {/* Récapitulatif */}
-          <div className="bg-gray-50 rounded-xl p-4 mb-4 border border-gray-100">
-            <div className="flex justify-between text-sm mb-1">
-              <span className="text-gray-500">Plan {plan.name}</span>
-              <span className="font-black text-gray-900">{price} $/mois</span>
+          {/* Récap */}
+          <div className="bg-gray-50 rounded-2xl p-4 border border-gray-100">
+            <div className="flex justify-between items-center mb-2">
+              <span className="text-sm text-gray-500">Plan {plan.name}</span>
+              <span className="text-base font-black text-gray-900">{price} $ / mois</span>
             </div>
-            <div className="flex justify-between text-xs text-gray-400">
-              <span>Facturation mensuelle</span>
-              <span className="text-green-600 font-semibold">Annulation à tout moment</span>
+            <div className="h-px bg-gray-200 mb-2" />
+            <div className="flex justify-between items-center">
+              <span className="text-xs text-gray-400">Facturation mensuelle</span>
+              <span className="text-xs font-semibold text-emerald-600 flex items-center gap-1">
+                <CheckCircle2 size={11} /> Annulation libre
+              </span>
             </div>
-          </div>
-
-          <div className="flex items-center gap-1.5 text-xs text-gray-400">
-            <Lock size={11} />
-            <span>Paiement sécurisé — données chiffrées SSL</span>
-            <ShieldCheck size={11} className="ml-auto text-green-500" />
           </div>
         </div>
 
         {/* Footer */}
-        <div className="flex-shrink-0 flex gap-3 px-6 pb-6 pt-2 border-t border-gray-100 bg-white">
-          <button
-            onClick={onClose}
-            className="flex-1 py-3 border border-gray-200 rounded-xl text-sm font-semibold text-gray-600 hover:bg-gray-50 transition"
-          >
-            Annuler
-          </button>
+        <div className="shrink-0 px-5 pb-6 pt-3 border-t border-gray-100">
           <button
             onClick={handlePay}
-            disabled={loading}
-            className="flex-1 flex items-center justify-center gap-2 py-3 bg-green-600 hover:bg-green-700 disabled:opacity-60 text-white text-sm font-bold rounded-xl transition active:scale-[0.98]"
+            disabled={loading || !selected || fetchingGw}
+            className="w-full flex items-center justify-center gap-2 py-3.5 bg-gray-900 hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed text-white text-sm font-bold rounded-2xl transition active:scale-[0.98] shadow-lg shadow-gray-900/20"
           >
             {loading
-              ? <><Loader2 size={15} className="animate-spin" /> Redirection…</>
-              : <><CreditCard size={15} /> Payer {price} $/mois</>
+              ? <><Loader2 size={16} className="animate-spin" /> Redirection en cours…</>
+              : <><Lock size={14} /> Payer {price} $ / mois</>
             }
           </button>
+
+          <div className="flex items-center justify-center gap-1.5 mt-3 text-xs text-gray-400">
+            <ShieldCheck size={12} className="text-emerald-500" />
+            <span>Paiement sécurisé · Chiffrement SSL 256-bit</span>
+          </div>
         </div>
 
       </div>

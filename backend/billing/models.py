@@ -10,7 +10,8 @@ class GatewayConfig(models.Model):
         ('google_pay', 'Google Pay'),
         ('stripe',     'Stripe'),
         ('cinetpay',   'CinetPay'),
-        ('paystack',  'Paystack'),
+        ('paystack',   'Paystack'),
+        ('geniuspay',  'GeniusPay (obsolète)'),  # conservé pour compatibilité migration
     ]
     provider   = models.CharField(max_length=20, unique=True, choices=PROVIDER_CHOICES)
     is_enabled = models.BooleanField(default=False)

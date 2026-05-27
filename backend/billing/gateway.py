@@ -35,14 +35,28 @@ def get_gateway(provider: str):
     return cls()
 
 
+def _enabled_providers() -> set:
+    from .models import GatewayConfig
+    return set(GatewayConfig.objects.filter(is_enabled=True).values_list('provider', flat=True))
+
+
 def detect_gateway_for_user(user) -> str:
-    shop    = getattr(user, 'shop', None)
-    country = shop.country if shop else ''
-    if country in XOF_COUNTRIES:
+    shop     = getattr(user, 'shop', None)
+    country  = shop.country if shop else ''
+    enabled  = _enabled_providers()
+
+    # passerelle préférée selon le pays, si elle est activée
+    if country in XOF_COUNTRIES and 'cinetpay' in enabled:
         return 'cinetpay'
-    if country in PAYSTACK_COUNTRIES:
+    if country in PAYSTACK_COUNTRIES and 'paystack' in enabled:
         return 'paystack'
-    return 'stripe'
+
+    # fallback : première passerelle disponible dans l'ordre de préférence
+    for provider in ('stripe', 'paystack', 'cinetpay'):
+        if provider in enabled:
+            return provider
+
+    raise GatewayError('Aucune passerelle de paiement n\'est activée.')
 
 
 def get_amount_and_currency(plan, country: str, provider: str) -> tuple:
