@@ -1,17 +1,33 @@
 import { Bot } from 'lucide-react'
+import { Link } from 'react-router-dom'
 
 const cols = [
   {
     title: 'Produit',
-    links: ['Fonctionnalités', 'Tarifs', 'Documentation', 'Changelog'],
+    links: [
+      { label: 'Fonctionnalités', href: '#' },
+      { label: 'Tarifs',          href: '#' },
+      { label: 'Documentation',   href: '#' },
+      { label: 'Changelog',       href: '#' },
+    ],
   },
   {
     title: 'Entreprise',
-    links: ['À propos', 'Blog', 'Carrières', 'Presse'],
+    links: [
+      { label: 'À propos',  href: '#' },
+      { label: 'Blog',      href: '#' },
+      { label: 'Carrières', href: '#' },
+      { label: 'Presse',    href: '#' },
+    ],
   },
   {
-    title: 'Support',
-    links: ["Centre d'aide", 'Statut', 'Contact', 'CGU & Confidentialité'],
+    title: 'Légal & Support',
+    links: [
+      { label: "Centre d'aide",            href: '#' },
+      { label: 'Contact',                  href: '#' },
+      { label: 'Politique de confidentialité', href: '/privacy-policy' },
+      { label: "Conditions d'utilisation", href: '/terms-of-service' },
+    ],
   },
 ]
 
@@ -42,8 +58,16 @@ export default function Footer() {
               <h4 className="text-white font-semibold text-sm mb-4">{col.title}</h4>
               <ul className="space-y-2">
                 {col.links.map(l => (
-                  <li key={l}>
-                    <a href="#" className="text-sm hover:text-green-400 transition-colors">{l}</a>
+                  <li key={l.label}>
+                    {l.href.startsWith('/') ? (
+                      <Link to={l.href} className="text-sm hover:text-green-400 transition-colors">
+                        {l.label}
+                      </Link>
+                    ) : (
+                      <a href={l.href} className="text-sm hover:text-green-400 transition-colors">
+                        {l.label}
+                      </a>
+                    )}
                   </li>
                 ))}
               </ul>
@@ -53,9 +77,13 @@ export default function Footer() {
 
         <div className="border-t border-gray-800 pt-8 flex flex-col sm:flex-row justify-between items-center gap-4 text-xs">
           <p>© 2026 AfriSell. Tous droits réservés.</p>
-          <p className="flex items-center gap-1">
-            Propulsé par <span className="text-green-400 font-medium">Claude (Anthropic)</span>
-          </p>
+          <div className="flex items-center gap-4">
+            <Link to="/privacy-policy"   className="hover:text-green-400 transition-colors">Confidentialité</Link>
+            <Link to="/terms-of-service" className="hover:text-green-400 transition-colors">CGU</Link>
+            <p className="flex items-center gap-1">
+              Propulsé par <span className="text-green-400 font-medium">Claude (Anthropic)</span>
+            </p>
+          </div>
         </div>
       </div>
     </footer>
