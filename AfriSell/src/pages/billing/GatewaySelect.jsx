@@ -43,6 +43,16 @@ function GooglePayIcon() {
     </svg>
   )
 }
+function PaystackIcon() {
+  return (
+    <svg className="w-6 h-6" viewBox="0 0 40 40" fill="none">
+      <rect width="40" height="40" rx="8" fill="#00C3F7"/>
+      <rect x="8" y="13" width="24" height="4" rx="2" fill="white"/>
+      <rect x="8" y="19" width="24" height="4" rx="2" fill="white" opacity="0.7"/>
+      <rect x="8" y="25" width="16" height="4" rx="2" fill="white" opacity="0.4"/>
+    </svg>
+  )
+}
 
 /* ── Config des 4 providers ───────────────────────────────────────────────── */
 const AFRICA_CODES = ['CI','SN','ML','BF','GN','TG','BJ','NE','CM','GH','NG','CD','MG','RW','KE','TZ','ET']
@@ -72,9 +82,19 @@ const GATEWAYS = (isAfrica) => [
     label:      'CinetPay',
     subtitle:   'Mobile Money Afrique de l\'Ouest',
     icon:       <CinetPayIcon />,
-    badge:      isAfrica ? 'Recommandé Afrique' : null,
+    badge:      isAfrica ? 'Recommandé CI/SN/ML…' : null,
     badgeColor: 'bg-green-100 text-green-700',
     methods:    ['Orange Money', 'MTN Mobile Money', 'Wave', 'Moov Money'],
+    typeIcon:   <Smartphone size={16} />,
+  },
+  {
+    id:         'paystack',
+    label:      'Paystack',
+    subtitle:   'Mobile Money · Nigeria, Ghana, Kenya…',
+    icon:       <PaystackIcon />,
+    badge:      isAfrica ? 'Recommandé NG/GH/KE' : null,
+    badgeColor: 'bg-cyan-100 text-cyan-700',
+    methods:    ['Mobile Money', 'Carte', 'USSD', 'Bank'],
     typeIcon:   <Smartphone size={16} />,
   },
   {

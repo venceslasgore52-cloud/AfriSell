@@ -251,10 +251,10 @@ _GATEWAY_DEFS = [
     {
         'provider':      'paystack',
         'label':         'Paystack',
-        'description':   'Paiement mobile Afrique francophone (XOF)',
+        'description':   'Mobile Money Afrique (Nigeria, Ghana, Kenya, Côte d\'Ivoire…)',
         'color':         '#FF6B35',
-        'required_vars': ['PAYSTACK_API_KEY', 'PAYSTACK_SITE_ID'],
-        'key_check':     lambda s: bool(s.get('PAYSTACK_API_KEY', '')) and s.get('PAYSTACK_API_KEY') != 'ta-cle-geniuspay',
+        'required_vars': ['PAYSTACK_SECRET_KEY', 'PAYSTACK_PUBLIC_KEY'],
+        'key_check':     lambda s: bool(s.get('PAYSTACK_SECRET_KEY', '')) and s.get('PAYSTACK_SECRET_KEY', '').startswith('sk_'),
     },
 ]
 
@@ -273,7 +273,7 @@ class AdminGatewayListView(APIView):
         env = {k: getattr(djsettings, k, '') for k in [
             'STRIPE_SECRET_KEY', 'STRIPE_PUBLISHABLE_KEY', 'STRIPE_WEBHOOK_SECRET',
             'CINETPAY_API_KEY', 'CINETPAY_SITE_ID',
-            'PAYSTACK_API_KEY', 'PAYSTACK_SITE_ID',
+            'PAYSTACK_SECRET_KEY', 'PAYSTACK_PUBLIC_KEY',
         ]}
         rows = []
         for gw in _GATEWAY_DEFS:
@@ -316,18 +316,22 @@ class PaystackWebhookView(APIView):
     permission_classes     = []
 
     def post(self, request):
-        # même flow que CinetPay — form POST, je vérifie le site_id
-        data = request.POST.dict() or request.data
-        log  = WebhookLog.objects.create(provider='paystack', payload=data)
+        import json
+        sig  = request.META.get('HTTP_X_PAYSTACK_SIGNATURE', '')
+        body = request.body
+        log  = WebhookLog.objects.create(provider='paystack', payload={}, headers={'x-paystack-signature': sig})
         try:
             from .paystack_gateway import PaystackGateway
             gw = PaystackGateway()
-            if not gw.verify_signature(data):
+            if not gw.verify_signature(body, sig):
                 log.error = 'signature invalide'
                 log.save(update_fields=['error'])
                 return Response({'detail': 'Signature invalide.'}, status=status.HTTP_403_FORBIDDEN)
-            log.processed = gw.handle_notify(data)
-            log.save(update_fields=['processed'])
+            event         = json.loads(body)
+            log.payload   = event
+            log.event_type = event.get('event', '')
+            log.processed  = gw.handle_event(event)
+            log.save(update_fields=['payload', 'event_type', 'processed'])
             return Response({'status': 'ok'})
         except Exception as exc:
             log.error = str(exc)
