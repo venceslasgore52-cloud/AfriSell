@@ -124,14 +124,18 @@ export default function GatewaySelect({ plan, onClose }) {
   useEffect(() => {
     api.get('/api/billing/gateways/').then(data => {
       const providers = Array.isArray(data) ? data : []
-      setEnabledProviders(providers.length ? providers : ['google_pay'])
-      // sélectionne le premier actif pertinent
+      // fallback : affiche tous les gateways si la DB n'est pas encore configurée
+      const active = providers.length ? providers : ['carte_bancaire', 'stripe', 'cinetpay', 'paystack', 'google_pay']
+      setEnabledProviders(active)
       const prefer = isAfrica
         ? ['cinetpay', 'paystack', 'google_pay', 'stripe', 'carte_bancaire']
         : ['google_pay', 'carte_bancaire', 'stripe']
-      const first = prefer.find(p => providers.includes(p)) || providers[0] || 'google_pay'
+      const first = prefer.find(p => active.includes(p)) || active[0] || 'google_pay'
       setSelected(first)
-    }).catch(() => {})
+    }).catch(() => {
+      // en cas d'erreur réseau : affiche tout
+      setEnabledProviders(['carte_bancaire', 'stripe', 'cinetpay', 'paystack', 'google_pay'])
+    })
   }, [isAfrica])
 
   const gateways = allGateways.filter(g => enabledProviders.includes(g.id))
