@@ -48,19 +48,19 @@ class CheckoutView(APIView):
         shop    = getattr(request.user, 'shop', None)
         country = shop.country if shop else 'OTHER'
 
+        provider = serializer.validated_data.get('provider') or None
+        payment  = None
         try:
-            provider = serializer.validated_data.get('provider') or detect_gateway_for_user(request.user)
-        except GatewayError as exc:
-            return Response({'detail': str(exc)}, status=status.HTTP_503_SERVICE_UNAVAILABLE)
+            if not provider:
+                provider = detect_gateway_for_user(request.user)
 
-        from .gateway import _enabled_providers
-        if provider not in _enabled_providers():
-            return Response(
-                {'detail': f'La passerelle « {provider} » n\'est pas activée.'},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
+            from .gateway import _enabled_providers
+            if provider not in _enabled_providers():
+                return Response(
+                    {'detail': f'La passerelle « {provider} » n\'est pas activée.'},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
 
-        try:
             amount, currency = get_amount_and_currency(plan, country, provider)
 
             payment = Payment.objects.create(
@@ -74,16 +74,16 @@ class CheckoutView(APIView):
 
             result = get_gateway(provider).create_checkout(payment, request)
 
-        except (GatewayError, Exception) as exc:
+        except Exception as exc:
             logger.exception('[checkout] Erreur provider=%s plan=%s user=%s : %s',
                              provider, plan.slug, request.user.id, exc)
-            # met le paiement en failed s'il a été créé
-            try:
-                payment.status         = 'failed'
-                payment.failure_reason = str(exc)
-                payment.save(update_fields=['status', 'failure_reason'])
-            except Exception:
-                pass
+            if payment is not None:
+                try:
+                    payment.status         = 'failed'
+                    payment.failure_reason = str(exc)
+                    payment.save(update_fields=['status', 'failure_reason'])
+                except Exception:
+                    pass
             return Response({'detail': str(exc)}, status=status.HTTP_502_BAD_GATEWAY)
 
         return Response({
