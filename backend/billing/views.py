@@ -38,19 +38,22 @@ class CheckoutView(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request):
-        serializer = CheckoutRequestSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-
-        plan = Plan.objects.filter(slug=serializer.validated_data['plan_slug'], is_active=True).first()
-        if not plan:
-            return Response({'detail': 'Plan introuvable.'}, status=status.HTTP_404_NOT_FOUND)
-
-        shop    = getattr(request.user, 'shop', None)
-        country = shop.country if shop else 'OTHER'
-
-        provider = serializer.validated_data.get('provider') or None
-        payment  = None
+        plan_slug = None
+        provider  = None
+        payment   = None
         try:
+            serializer = CheckoutRequestSerializer(data=request.data)
+            serializer.is_valid(raise_exception=True)
+
+            plan_slug = serializer.validated_data['plan_slug']
+            plan = Plan.objects.filter(slug=plan_slug, is_active=True).first()
+            if not plan:
+                return Response({'detail': 'Plan introuvable.'}, status=status.HTTP_404_NOT_FOUND)
+
+            shop    = getattr(request.user, 'shop', None)
+            country = shop.country if shop else 'OTHER'
+
+            provider = serializer.validated_data.get('provider') or None
             if not provider:
                 provider = detect_gateway_for_user(request.user)
 
@@ -75,8 +78,8 @@ class CheckoutView(APIView):
             result = get_gateway(provider).create_checkout(payment, request)
 
         except Exception as exc:
-            logger.exception('[checkout] Erreur provider=%s plan=%s user=%s : %s',
-                             provider, plan.slug, request.user.id, exc)
+            logger.exception('[checkout] plan=%s provider=%s user=%s',
+                             plan_slug, provider, request.user.id)
             if payment is not None:
                 try:
                     payment.status         = 'failed'
@@ -84,7 +87,8 @@ class CheckoutView(APIView):
                     payment.save(update_fields=['status', 'failure_reason'])
                 except Exception:
                     pass
-            return Response({'detail': str(exc)}, status=status.HTTP_502_BAD_GATEWAY)
+            detail = str(exc) or 'Erreur interne lors du paiement.'
+            return Response({'detail': detail}, status=status.HTTP_502_BAD_GATEWAY)
 
         return Response({
             'payment_id': str(payment.id),

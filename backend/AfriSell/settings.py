@@ -259,6 +259,45 @@ STUDIO_FONT_PATH    = config('STUDIO_FONT_PATH', default='')
 # ── Maintenance ───────────────────────────────────────────────────────────────
 MAINTENANCE_MODE = config('MAINTENANCE_MODE', default=False, cast=bool)
 
+# ── Logging — toujours visible dans les logs Railway / stdout ─────────────────
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '[{levelname}] {asctime} {name} {message}',
+            'style': '{',
+        },
+    },
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+            'formatter': 'verbose',
+        },
+    },
+    'root': {
+        'handlers': ['console'],
+        'level': 'WARNING',
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console'],
+            'level': 'ERROR',
+            'propagate': False,
+        },
+        'django.request': {
+            'handlers': ['console'],
+            'level': 'ERROR',
+            'propagate': False,
+        },
+        'billing': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+            'propagate': False,
+        },
+    },
+}
+
 # ── Sécurité (toujours actif) ─────────────────────────────────────────────────
 SECURE_CONTENT_TYPE_NOSNIFF = True        # empêche le sniffing MIME
 SECURE_BROWSER_XSS_FILTER   = True        # active le filtre XSS navigateur
